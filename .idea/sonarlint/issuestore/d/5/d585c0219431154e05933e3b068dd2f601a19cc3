@@ -1,0 +1,10 @@
+
+Ykotlin:S1172"9Use "_" instead of this unused lambda parameter "result".(î¾¹”8Ñàı²1
+qkotlin:S117="NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Èå¢ûÿÿÿÿ8Öàı²1
+jkotlin:S107v"GThis function has 8 parameters, which is greater than the 7 authorized.(‰ÿÍšùÿÿÿÿ8Ûàı²1
+Pkotlin:S1481A",Remove this unused "webView" local variable.(³ÉÚûÿÿÿÿ8ßàı²1
+Tkotlin:S1481š"/Remove this unused "isExpanded" local variable.(ÚüÎÄüÿÿÿÿ8‰²œı²1
+>kotlin:S1128"Remove this unused import.(é¢êáüÿÿÿÿ8äàı²1
+>kotlin:S1128"Remove this unused import.(¶ı¨Òúÿÿÿÿ8äàı²1
+8kotlin:S11282"Remove this unused import.(¥€ÈA8äàı²1
+9kotlin:S11288"Remove this unused import.(°°íÆ8äàı²1

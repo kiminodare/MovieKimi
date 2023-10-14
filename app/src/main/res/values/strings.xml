@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Movie Kimi</string>
+    <string name="description">Movie Kimi is a movie app that allows you to watch movies for free.</string>
+    <string name="loremipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ante augue, iaculis scelerisque scelerisque a, ullamcorper non ex. Maecenas sit amet libero eget eros lacinia ornare. Nunc aliquam lacus ut consequat congue. In ac suscipit leo. Curabitur pharetra velit lectus, blandit mattis justo varius ac. Duis non vulputate ante. Morbi feugiat leo eu ipsum consequat, at consequat est sodales. Duis lacus elit, bibendum in suscipit id, scelerisque id eros. Suspendisse eu tincidunt velit, sit amet rhoncus nisl. Nullam eu consectetur leo. Aliquam erat volutpat. Mauris congue cursus tellus, sed tempus nibh consequat ac. Etiam pharetra gravida augue, non venenatis libero sodales eu. Suspendisse laoreet orci sem, vitae aliquam urna sollicitudin at. Cras at justo ac diam facilisis gravida. Nunc pellentesque ullamcorper mauris vel consectetur. </string>
+</resources>

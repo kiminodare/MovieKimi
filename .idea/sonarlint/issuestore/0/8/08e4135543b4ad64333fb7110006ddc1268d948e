@@ -1,0 +1,8 @@
+
+Rkotlin:S1481¬"4Remove this unused "isGenreSelected" local variable.(˜ï²Îøÿÿÿÿ
+Dkotlin:S1481¥"+Remove this unused "moviee" local variable.(ò•¹
+7kotlin:S1128"Remove this unused import.(•Éì‰üÿÿÿÿ
+7kotlin:S1128"Remove this unused import.(Õ„´°ùÿÿÿÿ
+2kotlin:S1128"Remove this unused import.(¦ï½å
+`kotlin:S1192>"HDefine a constant instead of duplicating this literal "Error: " 4 times.(Ö«šŸ
+okotlin:S37765"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(Šî™ëýÿÿÿÿ
