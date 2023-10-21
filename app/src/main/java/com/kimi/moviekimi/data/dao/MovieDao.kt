@@ -2,6 +2,7 @@ package com.kimi.moviekimi.data.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
 import com.kimi.moviekimi.data.dto.Result
@@ -17,4 +18,5 @@ interface MovieDao {
 
     @Query("DELETE FROM MovieEntity")
     fun clearAll()
+
 }

@@ -5,7 +5,7 @@ import com.kimi.moviekimi.data.entity.MovieEntity
 
 fun Result.toMovieEntity(): MovieEntity {
     return MovieEntity(
-        idMovie = 1,
+        idMovie = 0,
         id = id,
         adult = adult,
         backdrop_path = backdrop_path,

@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,6 +24,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,7 +32,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,17 +64,28 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.kimi.moviekimi.R
 import com.kimi.moviekimi.data.dto.review.Result
+import com.kimi.moviekimi.navigation.MovieScreeName
 import com.kimi.moviekimi.viewModel.MovieViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 
+
+@Preview(showBackground = true)
 @Composable
 fun MovieItem(
     imgUrl: String? = null,
     Description: String = "Description",
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
+    onFavoriteClick: suspend  () -> Unit = {},
+    isFavorite: Boolean = false,
 ) {
     val offset = Offset(5.0f, 10.0f)
     val webView = false
@@ -78,7 +94,8 @@ fun MovieItem(
             .wrapContentHeight()
             .wrapContentWidth()
             .padding(10.dp)
-            .clickable(onClick = onClick),
+//            .clickable(onClick = onClick)
+            ,
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
         ),
@@ -102,24 +119,47 @@ fun MovieItem(
                     .fillMaxWidth()
                     .height(200.dp)
             )
-            Text(
+            Row(
                 modifier = Modifier
-                    .wrapContentHeight()
-                    .wrapContentWidth()
-                    .padding(10.dp)
-                    .align(Alignment.BottomStart),
-                text = Description,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFFFFFF),
-                    shadow = Shadow(
-                        color = Color.Black, offset = offset, blurRadius = 3f
-                    )
-                ),
-                maxLines = 2,
-                softWrap = true,
-            )
+                    .fillMaxWidth()
+                .align(Alignment.BottomStart),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .wrapContentWidth()
+                        .padding(10.dp),
+                    text = Description,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFFFFFFF),
+                        shadow = Shadow(
+                            color = Color.Black, offset = offset, blurRadius = 3f
+                        )
+                    ),
+                    maxLines = 2,
+                    softWrap = true,
+                )
+                Image(
+                    colorFilter = if (isFavorite) {
+                        ColorFilter.tint(Color.Yellow)
+                    } else {
+                        ColorFilter.tint(Color.White)
+                    },
+                    modifier = Modifier
+                        .size(50.dp)
+                        .padding(bottom = 8.dp)
+                        .clickable {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                onFavoriteClick()
+                            }  },
+                    painter = painterResource(id = R.drawable.round_star_border_24),
+                    contentDescription = "Favorite"
+                )
+            }
         }
     }
 }
@@ -134,19 +174,10 @@ fun MovieDetail(
     description: String? = stringResource(R.string.description),
     rating: String? = "7.5",
     review: List<Result>? = null,
+    onClick: () -> Unit = {},
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     var isPopupVisible by remember { mutableStateOf(false) }
-    if (bannerUrl == null) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
-    } else {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -162,7 +193,7 @@ fun MovieDetail(
                             "https://image.tmdb.org/t/p/original/$bannerUrl",
                         )
                     } else {
-                        painterResource(R.drawable._vfug6bwgyquzys9d69e5l85niz)
+                        painterResource(R.drawable.bannerblank)
                     },
                     contentDescription = "Banner"
                 )
@@ -181,7 +212,7 @@ fun MovieDetail(
                                 "https://image.tmdb.org/t/p/original/$posterUrl",
                             )
                         } else {
-                            painterResource(R.drawable.gpbm0mk8cp8a174rmuwgsadnykd)
+                            painterResource(R.drawable.posterblank)
                         },
                         contentDescription = "Poster"
                     )
@@ -211,7 +242,7 @@ fun MovieDetail(
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 50.dp)
                     .offset(y = 10.dp)
-                    .clickable { isExpanded = !isExpanded  },
+                    .clickable { isExpanded = !isExpanded },
                 text = description ?: stringResource(R.string.description),
                 style = TextStyle(
                     fontSize = 16.sp,
@@ -273,7 +304,8 @@ fun MovieDetail(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Button(onClick = {
-                    isPopupVisible = true
+//                    isPopupVisible = true
+                    onClick()
                 }) {
                     Text(text = "Watch Trailer")
                 }
@@ -294,7 +326,6 @@ fun MovieDetail(
             }
             )
         }
-    }
     if (isPopupVisible) {
         PopUpYoutube(
             onDismiss = { isPopupVisible = false },
@@ -401,7 +432,6 @@ fun ReviewItem(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
 fun PopUpYoutube(
     onDismiss: () -> Unit = {},
@@ -432,4 +462,129 @@ fun PopUpYoutube(
                 })
         }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+//@Preview(showBackground = true)
+@Composable
+fun seachMovieItemPreview(
+    onDismiss: () -> Unit = {},
+    mainMovieViewModel: MovieViewModel = hiltViewModel(),
+    navController: NavController,
+) {
+    val searchText = remember { mutableStateOf("") }
+    val isDone = remember { mutableStateOf(false) }
+    Dialog(
+        onDismissRequest = { onDismiss() },
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
+    ) {
+        Column {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(16.dp),
+                value = searchText.value,
+                onValueChange = {
+                    searchText.value = it
+                    isDone.value = false
+                },
+                label = {
+                    Text(text = "Search Movie")
+                },
+                leadingIcon = {
+                    Image(
+                        modifier = Modifier
+                            .size(24.dp),
+                        painter = painterResource(R.drawable.round_search_24),
+                        contentDescription = "Search"
+                    )
+                },
+                trailingIcon = {
+                    Image(
+                        modifier = Modifier
+                            .size(24.dp),
+                        painter = painterResource(R.drawable.round_close_24),
+                        contentDescription = "Close"
+                    )
+                },
+                singleLine = true,
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        isDone.value = true
+                    }
+                ),
+            )
+            if (isDone.value) {
+                val MainModelResultSearch = mainMovieViewModel.getSearchMovie(searchText.value)
+                val DataResultSearch = mainMovieViewModel.DataSearchMovie.value
+                if (DataResultSearch.data?.results?.size == 0) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(16.dp),
+                        text = "No Result",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFFFFFFF),
+                        ),
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .background(Color(0xFF40484D)),
+                        contentPadding = PaddingValues(5.dp),
+                        content =
+                    {
+                        items(DataResultSearch.data?.results?.size ?: 0) { index ->
+                            DataResultSearch.data?.results?.get(index)?.let { result ->
+                                SearchItem(
+                                    id = index,
+                                    Name = result.name,
+                                    onClick = {
+                                        navController.navigate("${MovieScreeName.MovieDetailScreen.name}/${result.id}")
+                                    }
+                                )
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(10.dp)
+                                        .background(
+                                            Color(0xFF000000)
+                                        ))
+                            }
+                        }
+                    }
+                    )
+                }
+            }
+        }
+    }
+}
+
+//@Preview(showBackground = true)
+@Composable
+fun SearchItem(
+    id: Int = 0,
+    Name: String = "Name",
+    onClick: () -> Unit = {},
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            },
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = Name,
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFFFFFFF),
+            ),
+        )
+    }
 }

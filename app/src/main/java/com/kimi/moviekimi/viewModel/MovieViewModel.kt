@@ -8,12 +8,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.kimi.moviekimi.data.database.MovieDatabase
+import com.kimi.moviekimi.data.dto.Result
 import com.kimi.moviekimi.data.dto.genre.Genre
 import com.kimi.moviekimi.data.dto.movieDetail.MovieDetail
 import com.kimi.moviekimi.data.dto.review.ReviewDto
+import com.kimi.moviekimi.data.dto.searchMovie.SearchMovieDTO
 import com.kimi.moviekimi.data.dto.trailer.TrailerDTO
 import com.kimi.moviekimi.data.mappers.toResult
 import com.kimi.moviekimi.data.model.DataOrException
@@ -21,9 +24,12 @@ import com.kimi.moviekimi.data.network.MovieApi
 import com.kimi.moviekimi.data.network.MovieRemoteMediator
 import com.kimi.moviekimi.repository.GenreRepository
 import com.kimi.moviekimi.repository.MovieDetailRepository
+import com.kimi.moviekimi.repository.MovieRepository
 import com.kimi.moviekimi.repository.ReviewRepository
+import com.kimi.moviekimi.repository.SearchMovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -35,12 +41,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-//    private val pager: Pager<Int, MovieEntity>,
     private val movieApi: MovieApi,
     private val movieDb: MovieDatabase,
-    private val repository: GenreRepository,
+    private val genreRepository: GenreRepository,
     private val movieDetailRepository: MovieDetailRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val searchMovieRepository: SearchMovieRepository
 ) : ViewModel() {
 
     // Movies Paging
@@ -67,8 +73,9 @@ class MovieViewModel @Inject constructor(
     }.flatMapLatest { (query, genreOption) ->
         Pager(
             config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = false
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 2
             ),
             remoteMediator = MovieRemoteMediator(
                 movieApi = movieApi,
@@ -81,6 +88,8 @@ class MovieViewModel @Inject constructor(
     }.map { pagingData ->
         pagingData.map { it.toResult() }
     }.cachedIn(viewModelScope)
+
+
 
     //Genre
     val DataGenre: MutableState<DataOrException<Genre, Boolean, Exception>> =
@@ -95,7 +104,7 @@ class MovieViewModel @Inject constructor(
     private fun getAllGenre() {
         viewModelScope.launch {
             DataGenre.value.isLoading = true
-            DataGenre.value = repository.getAllGenre()
+            DataGenre.value = genreRepository.getAllGenre()
             if (DataGenre.value.data.toString().isNotEmpty()) {
                 DataGenre.value.isLoading = false
             }
@@ -153,5 +162,22 @@ class MovieViewModel @Inject constructor(
             }
         }
         return DataReview.value
+    }
+
+    val DataSearchMovie: MutableState<DataOrException<SearchMovieDTO, Boolean, Exception>> =
+        mutableStateOf(
+            DataOrException(null, true, Exception(""))
+        )
+
+    fun getSearchMovie(keyword: String) {
+        viewModelScope.launch {
+            DataSearchMovie.value.isLoading = true // Set isLoading to true first
+            val result = searchMovieRepository.getSearchMovie(keyword)
+            if (result.data.toString().isNotEmpty()) {
+                DataSearchMovie.value = result // Update the value after you have the data
+            }
+            DataSearchMovie.value.isLoading = false // Set isLoading to false
+            Log.d("TAG", "getSearchMovie Hasil: ${DataSearchMovie.value.isLoading}")
+        }
     }
 }

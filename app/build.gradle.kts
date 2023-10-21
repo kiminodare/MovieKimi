@@ -63,6 +63,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
+    //Live Data
+    implementation("androidx.compose.runtime:runtime-livedata:1.0.5")
+
     // Material 3
     implementation("com.google.android.material:material:1.11.0-alpha03")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
@@ -121,4 +124,7 @@ dependencies {
 
     //UT
     testImplementation ("io.mockk:mockk:1.12.0")
+    testImplementation ("org.mockito:mockito-core:3.12.4")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 }

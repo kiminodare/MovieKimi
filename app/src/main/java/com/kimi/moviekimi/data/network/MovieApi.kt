@@ -4,6 +4,7 @@ import com.kimi.moviekimi.data.dto.genre.Genre
 import com.kimi.moviekimi.data.dto.MovieDTO
 import com.kimi.moviekimi.data.dto.movieDetail.MovieDetail
 import com.kimi.moviekimi.data.dto.review.ReviewDto
+import com.kimi.moviekimi.data.dto.searchMovie.SearchMovieDTO
 import com.kimi.moviekimi.data.dto.trailer.TrailerDTO
 import com.kimi.moviekimi.utils.Constants
 import retrofit2.http.GET
@@ -33,17 +34,24 @@ interface MovieApi {
     suspend fun getDetailMovie(
         @Path("movie_id") movieId: Int? = null,
         @Query("api_key") apiKey: String? = Constants.API_KEY,
-    ) : MovieDetail
+    ): MovieDetail
 
     @GET("movie/{movie_id}/videos")
     suspend fun getTrailerVideos(
-        @Path ("movie_id") movieId: Int? = null,
+        @Path("movie_id") movieId: Int? = null,
         @Query("api_key") apiKey: String? = Constants.API_KEY,
-    ) : TrailerDTO
+    ): TrailerDTO
 
     @GET("movie/{movie_id}/reviews")
     suspend fun getReviews(
-        @Path ("movie_id") movieId: Int? = null,
+        @Path("movie_id") movieId: Int? = null,
         @Query("api_key") apiKey: String? = Constants.API_KEY,
-    ) : ReviewDto
+    ): ReviewDto
+
+    @GET("search/keyword")
+    suspend fun searchMovie(
+        @Query("query") query: String? = null,
+        @Query("page") page: Int? = null,
+        @Query("api_key") apiKey: String? = Constants.API_KEY,
+    ): SearchMovieDTO
 }

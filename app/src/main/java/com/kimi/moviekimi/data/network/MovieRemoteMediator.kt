@@ -1,5 +1,6 @@
 package com.kimi.moviekimi.data.network
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -9,6 +10,7 @@ import com.kimi.moviekimi.data.database.MovieDatabase
 import com.kimi.moviekimi.data.entity.MovieEntity
 import com.kimi.moviekimi.data.mappers.toMovieEntity
 import com.kimi.moviekimi.utils.Constants
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -17,25 +19,26 @@ class MovieRemoteMediator(
     private val movieApi: MovieApi,
     private val movieDb: MovieDatabase,
     private val category: String,
-    private val withGenre: String?
+    private val withGenre: String
 ) : RemoteMediator<Int, MovieEntity>() {
     override suspend fun load(loadType: LoadType, state: PagingState<Int, MovieEntity>): MediatorResult {
-        return try {
-            val loadKey = when (loadType) {
-                LoadType.REFRESH -> 1
-                LoadType.PREPEND -> return MediatorResult.Success(
-                    endOfPaginationReached = true
-                )
-                LoadType.APPEND -> {
-                    val lastItem = state.lastItemOrNull()
-                    if(lastItem == null) {
-                        1
-                    } else {
-                        (lastItem.idMovie / state.config.pageSize) + 1
-                    }
+        val loadKey = when (loadType) {
+            LoadType.REFRESH -> 1
+            LoadType.PREPEND -> return MediatorResult.Success(
+                endOfPaginationReached = true
+            )
+            LoadType.APPEND -> {
+                val lastItem = state.lastItemOrNull()
+                if(lastItem == null) {
+                    1
+                } else {
+                    (lastItem.idMovie / state.config.pageSize) + 1
+                    Log.d("MovieRemoteMediator", "load: ${(lastItem.idMovie / state.config.pageSize) + 1}")
                 }
             }
-
+        }
+        return try {
+            delay(1000)
             val movieApi = movieApi.getMovies(
                 movieList = category,
                 apiKey = Constants.API_KEY,

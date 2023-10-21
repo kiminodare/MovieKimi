@@ -18,7 +18,13 @@ fun MovieDetailScreen(
 ) {
     val viewModel = hiltViewModel<MovieViewModel>()
     val movieDetail = viewModel.getMovieDetail(movieId)
-    val trailer = viewModel.getTrailerVideos(movieId).data?.results?.get(0)?.key ?: ""
+    val trailer = viewModel.getTrailerVideos(movieId).data?.results
+    var trailerData: String? = null
+    if (trailer != null) {
+        if (trailer.size > 0) {
+            trailerData = trailer?.get(0)?.key
+        }
+    }
     val review = viewModel.getReview(movieId).data?.results
     MovieDetail(
         bannerUrl = movieDetail.data?.backdrop_path,
@@ -26,8 +32,13 @@ fun MovieDetailScreen(
         title = movieDetail.data?.original_title,
         description = movieDetail.data?.overview,
         rating = movieDetail.data?.vote_average.toString(),
-        keyYoutube = trailer,
+        keyYoutube = trailerData,
         review = review,
-        navController = navController
+        navController = navController,
+        onClick = {
+            navController.navigate(
+                "youtube/$trailer"
+            )
+        }
     )
 }

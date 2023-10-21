@@ -8,13 +8,19 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kimi.moviekimi.data.database.MovieDatabase
+import com.kimi.moviekimi.data.dto.MovieDTO
+import com.kimi.moviekimi.data.dto.Result
 import com.kimi.moviekimi.data.entity.MovieEntity
 import com.kimi.moviekimi.data.mappers.toMovieEntity
 import com.kimi.moviekimi.data.network.MovieApi
 import com.kimi.moviekimi.data.network.MovieRemoteMediator
+import com.kimi.moviekimi.viewModel.MovieViewModel
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,58 +37,25 @@ class MovieRemoteMediatorTest {
     @Mock
     private lateinit var movieDb: MovieDatabase
 
+    @Mock
+    private lateinit var MovieViewModel: MovieViewModel
+
+    // Inisialisasi MovieRemoteMediator dengan Mockito
     private lateinit var movieRemoteMediator: MovieRemoteMediator
 
     @Before
-    fun setUp() {
+    fun setup() {
         MockitoAnnotations.initMocks(this)
         movieRemoteMediator = MovieRemoteMediator(movieApi, movieDb, "popular", null)
     }
 
     @OptIn(ExperimentalPagingApi::class)
     @Test
-    fun `load should return success`() {
-        runBlocking {
-            val loadType = LoadType.REFRESH
-            val state = mockk<PagingState<Int, MovieEntity>>()
-            every { state.config } returns PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = false
-            )
-            every { state.lastItemOrNull() } returns null
-            val loadKey = when (loadType) {
-                LoadType.REFRESH -> 1
-                LoadType.PREPEND -> return@runBlocking
-                LoadType.APPEND -> {
-                    val lastItem = state.lastItemOrNull()
-                    if (lastItem == null) {
-                        1
-                    } else {
-                        (lastItem.idMovie / PagingConfig(
-                            pageSize = 20,
-                            enablePlaceholders = false
-                        ).pageSize) + 1
-                    }
-                }
-            }
-            val movieApi = movieApi.getMovies(
-                movieList = "popular",
-                apiKey = "API_KEY",
-                page = loadKey,
-                withGenre = null
-            )
-            movieDb.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    movieDb.movieDao.clearAll()
-                }
-                val movieEntity = movieApi.results.map { it.toMovieEntity() }
-                movieDb.movieDao.upsertAll(movieEntity)
-            }
-            Mockito.`when`(movieRemoteMediator.load(loadType, state)).thenReturn(
-                RemoteMediator.MediatorResult.Success(
-                    endOfPaginationReached = movieApi.results.isEmpty()
-                )
-            )
-        }
+    fun `load success when LoadType is REFRESH`() = runBlocking {
+        val moviesPagingFlow = MovieViewModel.moviesPagingFlow
+
+
+
+
     }
 }

@@ -5,6 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
+import com.kimi.moviekimi.data.database.FavoriteDatabase
 import com.kimi.moviekimi.data.database.MovieDatabase
 import com.kimi.moviekimi.data.entity.MovieEntity
 import com.kimi.moviekimi.data.entity.migration1to2
@@ -13,6 +14,7 @@ import com.kimi.moviekimi.data.network.MovieRemoteMediator
 import com.kimi.moviekimi.repository.GenreRepository
 import com.kimi.moviekimi.repository.MovieDetailRepository
 import com.kimi.moviekimi.repository.ReviewRepository
+import com.kimi.moviekimi.repository.SearchMovieRepository
 import com.kimi.moviekimi.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -53,6 +55,22 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideFavoriteDatabase(@ApplicationContext context: Context): FavoriteDatabase {
+        return Room.databaseBuilder(
+            context,
+            FavoriteDatabase::class.java,
+            "favorite_db"
+        )
+            .allowMainThreadQueries()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteRepository(favoriteDatabase: FavoriteDatabase) = favoriteDatabase.favoriteDao
+
+    @Provides
+    @Singleton
     fun provideGenreRepository(api: MovieApi) = GenreRepository(api)
 
     @Provides
@@ -62,4 +80,8 @@ class AppModule {
     @Provides
     @Singleton
     fun provideReviewRepository(api: MovieApi) = ReviewRepository(api)
+
+    @Provides
+    @Singleton
+    fun provideSearchMovieRepository(api: MovieApi) = SearchMovieRepository(api)
 }
