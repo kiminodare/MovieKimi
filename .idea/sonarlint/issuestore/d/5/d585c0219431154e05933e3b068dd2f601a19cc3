@@ -1,14 +1,22 @@
 
-Vkotlin:S1172"6Remove this unused function parameter "navController".(¬àÝâ8°¢ôÿ²1
-qkotlin:S117G"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Èå¢ûÿÿÿÿ8¹¢ôÿ²1
-kkotlin:S107€"GThis function has 9 parameters, which is greater than the 7 authorized.(‰ÿÍšùÿÿÿÿ8¿¢ôÿ²1
-Pkotlin:S1481K",Remove this unused "webView" local variable.(³ÉÚûÿÿÿÿ8Å¢ôÿ²1
+Tkotlin:S1172V"0Remove this unused function parameter "onClick".(£Üîÿÿÿÿÿ8€¼™”µ1
+Vkotlin:S1172©"6Remove this unused function parameter "navController".(¬àÝâ8°¢ôÿ²1
+Kkotlin:S1172¹"+Remove this unused function parameter "id".(ß¹Òœ8…¼™”µ1
+qkotlin:S117U"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Èå¢ûÿÿÿÿ8¹¢ôÿ²1
+rkotlin:S117º"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(°Ù€üÿÿÿÿ8¼™”µ1
+rkotlin:S117‡"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(žáò8¼™”µ1
+wkotlin:S117ˆ"SRename this local variable to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(‡êôëúÿÿÿÿ8¼™”µ1
+kkotlin:S107¨"GThis function has 9 parameters, which is greater than the 7 authorized.(‰ÿÍšùÿÿÿÿ8¿¢ôÿ²1
+Pkotlin:S1481[",Remove this unused "webView" local variable.(³ÉÚûÿÿÿÿ8Å¢ôÿ²1
+Zkotlin:S1481‡":Remove this unused "MainModelResultSearch" local variable.(žáò8£¼™”µ1
 >kotlin:S1128"Remove this unused import.(ÊÒÅ­ùÿÿÿÿ8Ê¢ôÿ²1
->kotlin:S1128"Remove this unused import.(é¢êáüÿÿÿÿ8Ê¢ôÿ²1
-8kotlin:S1128"Remove this unused import.(¢™w8Ê¢ôÿ²1
->kotlin:S1128"Remove this unused import.(¶ý¨Òúÿÿÿÿ8Ê¢ôÿ²1
->kotlin:S1128."Remove this unused import.(®‘¿–ûÿÿÿÿ8Ê¢ôÿ²1
-8kotlin:S11289"Remove this unused import.(¥€ÈA8Ê¢ôÿ²1
->kotlin:S1128>"Remove this unused import.(ÿÈ€Ûÿÿÿÿÿ8ŒŸ§ù´1
-9kotlin:S1128B"Remove this unused import.(°°íÆ8Ê¢ôÿ²1
-wkotlin:S3776€"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‰ÿÍšùÿÿÿÿ8Í¢ôÿ²1
+>kotlin:S1128"Remove this unused import.(é¢êáüÿÿÿÿ8Ê¢ôÿ²1
+8kotlin:S1128"Remove this unused import.(¢™w8Ê¢ôÿ²1
+>kotlin:S1128"Remove this unused import.(æÙ¼þúÿÿÿÿ8Ê¢ôÿ²1
+>kotlin:S1128$"Remove this unused import.(‘ôÏ þÿÿÿÿ8©¼™”µ1
+9kotlin:S1128&"Remove this unused import.(”ªˆ­8©¼™”µ1
+>kotlin:S11283"Remove this unused import.(®‘¿–ûÿÿÿÿ8Ê¢ôÿ²1
+9kotlin:S1128H"Remove this unused import.(°°íÆ8Ê¢ôÿ²1
+8kotlin:S1128K"Remove this unused import.(ú•Êy8ª¼™”µ1
+9kotlin:S1128L"Remove this unused import.(…ñ“¹8ª¼™”µ1
+>kotlin:S1128N"Remove this unused import.(Ï‡©Œúÿÿÿÿ8ª¼™”µ1

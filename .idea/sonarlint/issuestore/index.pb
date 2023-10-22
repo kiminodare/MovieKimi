@@ -67,3 +67,11 @@ k
 ;app/src/main/java/com/kimi/moviekimi/MoveKimiApplication.kt,5\7\57c71f5a52717d562207325e0490e4814dd616a5
 g
 7app/src/main/java/com/kimi/moviekimi/utils/Constants.kt,3\a\3a05ca0895bf7b8d36b36e087a5c265aa632a7c9
+u
+Eapp/src/main/java/com/kimi/moviekimi/repository/FavoriteRepository.kt,e\9\e91ed9c468f288d1851c033e6e7837ee0fb89cff
+l
+<app/src/main/java/com/kimi/moviekimi/data/dao/FavoriteDao.kt,b\f\bf970b5b2f2440d3904e364b32658fc2c896781d
+x
+Happ/src/main/java/com/kimi/moviekimi/viewModel/FavoriteMovieViewModel.kt,c\d\cd989f229d43bf6484d19591fc1170e05e70fdf4
+s
+Capp/src/main/java/com/kimi/moviekimi/component/FavoriteComponent.kt,c\b\cb4cfbfdc147170bcdf25f7b4921a35348caf018

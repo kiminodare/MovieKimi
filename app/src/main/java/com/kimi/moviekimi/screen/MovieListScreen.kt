@@ -94,7 +94,7 @@ fun MovieListScreen(
                     modifier = Modifier
                         .padding(8.dp),
                 ) {
-                    if(isSearchExpanded){
+                    if (isSearchExpanded) {
                         seachMovieItemPreview(
                             onDismiss = { isSearchExpanded = false },
                             navController = navController
@@ -160,7 +160,9 @@ fun MovieListScreen(
                                         },
                                         onFavoriteClick = {
                                             if (isFavorite) {
-                                                favoriteMovieViewModel.deleteFavoriteEntityById(result.id)
+                                                favoriteMovieViewModel.deleteFavoriteEntityById(
+                                                    result.id
+                                                )
                                             } else {
                                                 favoriteMovieViewModel.insertFavoriteEntity(result.toFavoriteEntity())
                                             }
